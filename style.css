@@ -1,14 +1,23 @@
+/* * {
+    outline: 1px solid red;
+} */
 html,body { 
     margin: 0;   /* Remove body margins */
-    padding: 0;
-    background-color: lavender;
+    padding: 1;
 }
 #parent{
     justify-items: center;
     display: flexbox;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background 1s ease;
 }
 #current-location{
-    background-color: lavender;
+    background: rgba(230, 230, 250, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     width: 100%;
     text-align: center;
 }
@@ -29,39 +38,45 @@ html,body {
     width: 100px;
     border-radius: 10px;
     font-size: large; font-weight: bold;
-    background-color: lightcoral;
-    color: crimson;
+    background-color: thistle;
+    color: slateblue;
 }
 #current-weather{
-    background-color: salmon;
+    background: rgba(250, 128, 114, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     padding: 10px;
     text-align: center;
     width: 240px;
-    color: darkslateblue;
+    color: indigo;
     border-radius: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 #hourly-forecast{
-    background-color: salmon;
+    background: rgba(250, 128, 114, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;  /* prevent vertical overflow */
     gap: 10px;
     padding: 10px;
-    width: 98%;         /* contained within page width */
+    width: 100%;         /* contained within page width */
+    box-sizing: border-box;
     flex-wrap: nowrap;
-    color: darkslateblue;
+    color: indigo;
     border-radius: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: center;
 }
 #daily-forecast{
-    background-color: salmon;
+    background: rgba(250, 128, 114, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     padding: 10px;
     text-align: center;
-    width: 500px;
-    color: darkslateblue;
+    width: 60%;
+    color: indigo;
     border-radius: 20px;
-    margin-bottom: 10px;
 }
