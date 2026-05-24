@@ -1,0 +1,67 @@
+html,body { 
+    margin: 0;   /* Remove body margins */
+    padding: 0;
+    background-color: lavender;
+}
+#parent{
+    justify-items: center;
+    display: flexbox;
+}
+#current-location{
+    background-color: lavender;
+    width: 100%;
+    text-align: center;
+}
+#input-section{
+    margin-bottom: 10px;
+    padding: 5px;
+}
+#input-field{
+    height: 50px;
+    width: 250px;
+    border-radius: 10px;
+    font-size: large; font-weight: bold;
+    background-color: thistle;
+    color:slateblue;
+}
+#search-btn{
+    height: 50px;
+    width: 100px;
+    border-radius: 10px;
+    font-size: large; font-weight: bold;
+    background-color: lightcoral;
+    color: crimson;
+}
+#current-weather{
+    background-color: salmon;
+    padding: 10px;
+    text-align: center;
+    width: 240px;
+    color: darkslateblue;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+#hourly-forecast{
+    background-color: salmon;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;  /* prevent vertical overflow */
+    gap: 10px;
+    padding: 10px;
+    width: 98%;         /* contained within page width */
+    flex-wrap: nowrap;
+    color: darkslateblue;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+#daily-forecast{
+    background-color: salmon;
+    padding: 10px;
+    text-align: center;
+    width: 500px;
+    color: darkslateblue;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
