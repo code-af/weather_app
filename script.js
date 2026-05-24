@@ -18,14 +18,12 @@ navigator.geolocation.getCurrentPosition(
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`)
     const data = await response.json()
     const dateTime = `${data.current.time.slice(0, 10)}`
-    console.log(data)
     setBackground(data.current.weather_code, data.current.temperature_2m)
 
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
     const addyResponse = await fetch(url)
     const addyData = await addyResponse.json()
     const address = addyData.address
-    console.log(address)
 
     currentLocation.innerHTML = `<h1>Weather at ${address.country}, ${address.state}-${address.city}
     <h2>Date: ${dateTime}</h2>`
@@ -75,7 +73,6 @@ navigator.geolocation.getCurrentPosition(
             const geocodeUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`
             const response = await fetch(geocodeUrl)
             const data = await response.json()
-            console.log(data?.results[0])
             currentLocation.innerHTML = `<h1>Weather at ${data.results[0]?.name}, ${data.results[0]?.country}</h1>`
             const latitude = data.results[0].latitude
             const longitude = data.results[0].longitude
@@ -83,7 +80,6 @@ navigator.geolocation.getCurrentPosition(
             const searchResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`)
             const searchData = await searchResponse.json()
             currentLocation.innerHTML += `<h3>${searchData.current.time.slice(0, 10)}</h3>`
-            console.log(searchData)
             setBackground(searchData.current.weather_code, searchData.current.temperature_2m)
 
             currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${searchData.current.time.slice(-5)}
