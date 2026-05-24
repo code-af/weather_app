@@ -19,6 +19,7 @@ navigator.geolocation.getCurrentPosition(
     const data = await response.json()
     const dateTime = `${data.current.time.slice(0, 10)}`
     console.log(data)
+    setBackground(data.current.weather_code, data.current.temperature_2m)
 
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
     const addyResponse = await fetch(url)
@@ -31,7 +32,7 @@ navigator.geolocation.getCurrentPosition(
 
     currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${data.current.time.slice(-5)}
     <br>Temperature : ${data.current.temperature_2m}${data.current_units.temperature_2m}${getWeatherEmoji(data.current.weather_code)}<br>
-    Condition : ${getWeatherDescription(data.current.weather_code)}
+    Condition : ${getWeatherDescription(data.current.weather_code)}<br>
     Rain-Chance : ${data.current.precipitation_probability}${data.current_units.precipitation_probability}<br>
     Humidity : ${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}</br>
     Wind-Speed : ${data.current.wind_speed_10m}${data.current_units.wind_speed_10m}</h3>`
@@ -52,6 +53,7 @@ navigator.geolocation.getCurrentPosition(
     }
 
 },
+                                                //  USER DENIED SECTION !!!!!!!!!!
     (denied)=>{
         console.log(denied.message)
         
@@ -80,10 +82,13 @@ navigator.geolocation.getCurrentPosition(
 
             const searchResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`)
             const searchData = await searchResponse.json()
+            currentLocation.innerHTML += `<h3>${searchData.current.time.slice(0, 10)}</h3>`
             console.log(searchData)
+            setBackground(searchData.current.weather_code, searchData.current.temperature_2m)
 
             currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${searchData.current.time.slice(-5)}
-            <br>Temperature : ${searchData.current.temperature_2m}${searchData.current_units.temperature_2m}<br>
+            <br>Temperature : ${searchData.current.temperature_2m}${searchData.current_units.temperature_2m}
+            ${getWeatherEmoji(searchData.current.weather_code)}<br>
             Condition : ${getWeatherDescription(searchData.current.weather_code)}
             <br>Rain-Chance : ${searchData.current.precipitation_probability}${searchData.current_units.precipitation_probability}<br>
             Humidity : ${searchData.current.relative_humidity_2m}${searchData.current_units.relative_humidity_2m}</br>
@@ -145,4 +150,23 @@ function getWeatherEmoji(code) {
     if(code <= 82) return "🌦️"  // if 78-82 → return immediately
     if(code >= 95) return "⛈️"  // if 95+ → return immediately
     return "🌤️"                 // anything else → default
+}
+function setBackground(code, temperature) {
+    const container = document.getElementById("parent")
+    
+    if(code === 0 && !isNight) {
+        container.style.backgroundImage = "url('images/sunny.jpg')"
+    } else if(code === 0 && isNight) {
+        container.style.backgroundImage = "url('images/night.jpg')"
+    } else if(code <= 3) {
+        container.style.backgroundImage = "url('images/partly_cloudy.jpg')"
+    } else if(code <= 48) {
+        container.style.backgroundImage = "url('images/cloudy.jpg')"
+    } else if(code <= 67 || (code >= 80 && code <= 82)) {
+        container.style.backgroundImage = "url('images/rainy.jpg')"
+    } else if(code <= 77) {
+        container.style.backgroundImage = "url('images/snowy.jpg')"
+    } else if(code >= 95) {
+        container.style.backgroundImage = "url('images/thunder.jpg')"
+    }
 }
