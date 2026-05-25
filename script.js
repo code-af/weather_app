@@ -18,7 +18,7 @@ navigator.geolocation.getCurrentPosition(
     const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`)
     const data = await response.json()
     const dateTime = `${data.current.time.slice(0, 10)}`
-    setBackground(data.current.weather_code, data.current.temperature_2m)
+    setBackground(data.current.weather_code, data.current.temperature_2m, data.current.time.slice(-5, -3))
 
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
     const addyResponse = await fetch(url)
@@ -80,7 +80,7 @@ navigator.geolocation.getCurrentPosition(
             const searchResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`)
             const searchData = await searchResponse.json()
             currentLocation.innerHTML += `<h3>${searchData.current.time.slice(0, 10)}</h3>`
-            setBackground(searchData.current.weather_code, searchData.current.temperature_2m)
+            setBackground(searchData.current.weather_code, searchData.current.temperature_2m, searchData.current.time.slice(-5, -3))
 
             currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${searchData.current.time.slice(-5)}
             <br>Temperature : ${searchData.current.temperature_2m}${searchData.current_units.temperature_2m}
@@ -147,8 +147,13 @@ function getWeatherEmoji(code) {
     if(code >= 95) return "⛈️"  // if 95+ → return immediately
     return "🌤️"                 // anything else → default
 }
-function setBackground(code, temperature) {
+function setBackground(code, temperature, current_time) {
     const container = document.getElementById("parent")
+    let isNight = false
+
+    if(current_time > 18 || current_time < 5){
+        isNight = true
+    }
     
     if(code === 0 && !isNight) {
         container.style.backgroundImage = "url('images/sunny.jpg')"
