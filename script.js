@@ -1,12 +1,8 @@
+const container = document.getElementById("parent")
 const currentLocation = document.getElementById("current-location")
-const currentWeatherInfo = document.getElementById("current-weather")
-const hourlyForecast = document.getElementById("hourly-forecast")
-const dailyForecast = document.getElementById("daily-forecast")
 const inputSection = document.getElementById("input-section")
 
 currentLocation.innerHTML = "<h1>How's the weather ?</h1>"
-hourlyForecast.innerHTML = "<h2>Todays Hourly Forecast</h2>"
-dailyForecast.innerHTML = "<h2>Forecast for Following days</h2>"
 
 const month = {"01":"january","02":"February", "03":"March", "04":"April","05":"May",
     "06":"June","07":"July","08":"August","09":"September","10":"October","11":"November","12":"December"}
@@ -28,19 +24,29 @@ navigator.geolocation.getCurrentPosition(
     currentLocation.innerHTML = `<h1>Weather at ${address.country}, ${address.state}-${address.city}
     <h2>Date: ${dateTime}</h2>`
 
+    const currentWeatherInfo = document.createElement("div")
+    currentWeatherInfo.id = "current-weather"
     currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${data.current.time.slice(-5)}
     <br>Temperature : ${data.current.temperature_2m}${data.current_units.temperature_2m}${getWeatherEmoji(data.current.weather_code)}<br>
     Condition : ${getWeatherDescription(data.current.weather_code)}<br>
     Rain-Chance : ${data.current.precipitation_probability}${data.current_units.precipitation_probability}<br>
     Humidity : ${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}</br>
     Wind-Speed : ${data.current.wind_speed_10m}${data.current_units.wind_speed_10m}</h3>`
+    container.appendChild(currentWeatherInfo)
 
+    const hourlyForecast = document.createElement("div")
+    hourlyForecast.id = "hourly-forecast"
+    hourlyForecast.innerHTML = "<h2>Todays Hourly Forecast</h2>"
     const hours = 24
     for(let h = 0; h<hours; h++){
         hourlyForecast.innerHTML += `<h3>Time ${data.hourly.time[h].slice(-5)} : Temperature ${data.hourly.temperature_2m[h]}
         ${data.hourly_units.temperature_2m}<br>${getWeatherEmoji(data.hourly.weather_code[h])}</h3>`
     }
+    container.appendChild(hourlyForecast)
     
+    const dailyForecast = document.createElement("div")
+    dailyForecast.id = "daily-forecast"
+    dailyForecast.innerHTML = "<h2>Forecast for Following days</h2>"
     const days = data.daily.time.length
     for(let i = 0; i<days ; i++){
         dailyForecast.innerHTML += `<h3>${getWeatherDescription(data.daily.weather_code[i])} 
@@ -49,13 +55,13 @@ navigator.geolocation.getCurrentPosition(
         To ${data.daily.temperature_2m_max[i]}${data.daily_units.temperature_2m_max}
         ${getWeatherEmoji(data.daily.weather_code[i])}</h3>`
     }
-
+    container.appendChild(dailyForecast)
 },
                                                 //  USER DENIED SECTION !!!!!!!!!!
     (denied)=>{
         console.log(denied.message)
         
-        currentWeatherInfo.innerHTML = `<h1>Allow location or Search by City Name</h1>`
+        currentLocation.innerHTML += `<h1>Allow location or Search by a City Name</h1>`
         inputSection.innerHTML += `<input id="input-field" type="text" placeholder="Enter a city..."/>
                                     <button id="search-btn">Search</button>`
 
@@ -82,14 +88,26 @@ navigator.geolocation.getCurrentPosition(
             currentLocation.innerHTML += `<h3>${searchData.current.time.slice(0, 10)}</h3>`
             setBackground(searchData.current.weather_code, searchData.current.temperature_2m, searchData.current.time.slice(-5, -3))
 
+            let currentWeatherInfo = document.getElementById("current-weather")
+            if(!currentWeatherInfo){
+                currentWeatherInfo = document.createElement("div")
+                currentWeatherInfo.id = "current-weather"
+                container.appendChild(currentWeatherInfo)
+            }
             currentWeatherInfo.innerHTML = `<h2>Current Weather Info</h2><h3>Time : ${searchData.current.time.slice(-5)}
             <br>Temperature : ${searchData.current.temperature_2m}${searchData.current_units.temperature_2m}
             ${getWeatherEmoji(searchData.current.weather_code)}<br>
             Condition : ${getWeatherDescription(searchData.current.weather_code)}
             <br>Rain-Chance : ${searchData.current.precipitation_probability}${searchData.current_units.precipitation_probability}<br>
             Humidity : ${searchData.current.relative_humidity_2m}${searchData.current_units.relative_humidity_2m}</br>
-            Wind-Speed : ${searchData.current.wind_speed_10m}${searchData.current_units.wind_speed_10m}</h3>`            
+            Wind-Speed : ${searchData.current.wind_speed_10m}${searchData.current_units.wind_speed_10m}</h3>`
 
+            let hourlyForecast = document.getElementById("hourly-forecast")
+            if(!hourlyForecast){
+                hourlyForecast = document.createElement("div")
+                hourlyForecast.id = "hourly-forecast"
+                container.appendChild(hourlyForecast)
+            }
             const hours = 24
             hourlyForecast.innerHTML = "<h2>Todays Hourly Forecast</h2>"
             for(let h = 0; h<hours; h++){
@@ -97,6 +115,12 @@ navigator.geolocation.getCurrentPosition(
                 ${searchData.hourly_units.temperature_2m}<br>${getWeatherEmoji(searchData.hourly.weather_code[h])}</h3>`
             }
 
+            let dailyForecast = document.getElementById("daily-forecast")
+            if(!dailyForecast){
+                dailyForecast = document.createElement("div")
+                dailyForecast.id = "daily-forecast"
+                container.appendChild(dailyForecast)
+            }
             const days = searchData.daily.time.length
             dailyForecast.innerHTML = "<h2>Forecast for upcoming days</h2>"
             for(let i = 0; i<days ; i++){
@@ -106,7 +130,7 @@ navigator.geolocation.getCurrentPosition(
                 To ${searchData.daily.temperature_2m_max[i]}${searchData.daily_units.temperature_2m_max}
                 ${getWeatherEmoji(searchData.daily.weather_code[i])}</h3>`
             }
-
+            
         })
     })
 function getWeatherDescription(code) {
@@ -148,7 +172,6 @@ function getWeatherEmoji(code) {
     return "🌤️"                 // anything else → default
 }
 function setBackground(code, temperature, current_time) {
-    const container = document.getElementById("parent")
     let isNight = false
 
     if(current_time > 18 || current_time < 5){
