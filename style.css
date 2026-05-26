@@ -13,6 +13,7 @@ html,body {
     background-position: center;
     background-repeat: no-repeat;
     transition: background 1s ease;
+    background-image: url(images/default.jpg);
 }
 #current-location{
     background: rgba(230, 230, 250, 0.1);

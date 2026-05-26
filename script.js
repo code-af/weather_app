@@ -88,7 +88,7 @@ navigator.geolocation.getCurrentPosition(
             currentLocation.innerHTML += `<h3>${searchData.current.time.slice(0, 10)}</h3>`
             setBackground(searchData.current.weather_code, searchData.current.temperature_2m, searchData.current.time.slice(-5, -3))
 
-            let currentWeatherInfo = document.getElementById("current-weather")
+            let currentWeatherInfo = document.getElementById("current-weather")  // dynamic generation of html div elements
             if(!currentWeatherInfo){
                 currentWeatherInfo = document.createElement("div")
                 currentWeatherInfo.id = "current-weather"
@@ -130,7 +130,6 @@ navigator.geolocation.getCurrentPosition(
                 To ${searchData.daily.temperature_2m_max[i]}${searchData.daily_units.temperature_2m_max}
                 ${getWeatherEmoji(searchData.daily.weather_code[i])}</h3>`
             }
-            
         })
     })
 function getWeatherDescription(code) {
